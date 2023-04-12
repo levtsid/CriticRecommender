@@ -21,18 +21,25 @@ def newcheck(pile,out): #test for new additions to database
         resp = requests.get(url,headers = headers_a)
         htmlpile = BeautifulSoup(resp.text, 'html.parser')
         for name1 in htmlpile.find_all('tr'):#add movies in fields
-            urlm="https://www.metacritic.com/movie/%s/" %(pile['links'][mov])
+            if name1.attrs: # ignore spacers
+                continue
+            origlink = name1.find('a', class_='title').attrs['href'].split('/movie/')[1]
+            urlm="https://www.metacritic.com/movie/%s/" %(origlink)
             resp1 = requests.get(urlm,headers = headers_a)
             page2 = BeautifulSoup(resp1.text, 'html.parser')
-            if not blah:
-                links
+            newlink = page2.find('link', rel='canonical').attrs['href'].split('/movie/')[1]
+            if newlink != origlink:#page2.find('link', rel='canonical').attrs['href'].split('/movie/')[1] == name1.find('a', class_='title').attrs['href'].split('/movie/')[1]:
+                pile['links'].append(newlink)
+                print ("flip",newlink)
             else:
-                links
-            if not name1.find('td'):
+                pile['links'].append(origlink)
+                print ("orig",origlink)
+            #if not name1.find('td'):
+            #    continue
+            if name1.find('h3').text in pile['movie']:
                 continue
-            if name1.find('a', class_='title').attrs['href'].split('/movie/')[1] in pile['links']:
-                continue
-            pile['links'].append(name1.find('a', class_='title').attrs['href'].split('/movie/')[1])
+            time.sleep(random.random()*5)
+            #pile['links'].append(name1.find('a', class_='title').attrs['href'].split('/movie/')[1])
             pile['movie'].append(name1.find('h3').text)
             if len(name1.select('div.clamp-details')[0].text.split('|')) > 1:
                 pile['cert'].append(name1.select('div.clamp-details')[0].text.split('|')[1].strip())
@@ -43,7 +50,7 @@ def newcheck(pile,out): #test for new additions to database
             pile['revcount'].append(0)
             mov = len(pile['links'])-1
             revadd(pile,out,mov)
-        time.sleep(random.random())
+        time.sleep(random.random()*5)
         
     
     
