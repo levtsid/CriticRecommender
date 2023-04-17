@@ -25,3 +25,5 @@ for i in range(len(revdd['rate'].to_list())):
     spar[revdd['revi'].to_list()[i]][revdd['name'].to_list()[i]] = revdd['rate'].to_list()[i]
     
 spf = spar.astype(pd.SparseDtype("float", np.nan))
+
+revspar  = tf.data.Dataset.from_tensor_slices(spf)
