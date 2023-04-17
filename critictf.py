@@ -23,3 +23,5 @@ revdd= revdfrevs.drop(columns = ['Unnamed: 0','linkr'])
 #ignore this bit, it's very ugly and needs to be fixed later
 for i in range(len(revdd['rate'].to_list())):
     spar[revdd['revi'].to_list()[i]][revdd['name'].to_list()[i]] = revdd['rate'].to_list()[i]
+    
+spf = spar.astype(pd.SparseDtype("float", np.nan))
