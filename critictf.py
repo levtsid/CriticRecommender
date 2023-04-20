@@ -12,6 +12,9 @@ from IPython.core.display import clear_output
 from warnings import warn
 from random import randint
 
+import collections
+from typing import Dict, List, Optional, Text, Tuple
+
 import tensorflow_ranking as tfr
 import tensorflow_recommenders as tfrs
 
