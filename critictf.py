@@ -1,3 +1,16 @@
+import numpy as np
+import scipy as sp
+import pandas as pd
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import os, re, importlib, requests, time, tempfile, pprint, glob, imageio
+import PIL
+from typing import Dict, Text
+from IPython import display
+from bs4 import BeautifulSoup
+from IPython.core.display import clear_output
+from warnings import warn
+from random import randint
 
 import tensorflow_ranking as tfr
 import tensorflow_recommenders as tfrs
