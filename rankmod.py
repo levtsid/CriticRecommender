@@ -44,6 +44,7 @@ class RankingModel(tfrs.Model):
     self.score_model = tf.keras.Sequential([
       # Learn multiple dense layers.
       tf.keras.layers.Dense(256, activation="relu"),
+      tf.keras.layers.Dropout(0.4),
       tf.keras.layers.Dense(64, activation="relu"),
       # Make rating predictions in the final layer.
       tf.keras.layers.Dense(1)
