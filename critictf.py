@@ -18,6 +18,8 @@ from typing import Dict, List, Optional, Text, Tuple
 import tensorflow_ranking as tfr
 import tensorflow_recommenders as tfrs
 
+from rankmod import RankingModel
+
 #run moviefunc
 
 
