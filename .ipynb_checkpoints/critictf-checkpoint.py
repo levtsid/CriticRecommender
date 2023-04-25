@@ -18,6 +18,8 @@ from typing import Dict, List, Optional, Text, Tuple
 import tensorflow_ranking as tfr
 import tensorflow_recommenders as tfrs
 
+from rankmod import RankingModel
+
 #run moviefunc
 
 
@@ -73,6 +75,6 @@ listwise_model = RankingModel(tfr.keras.losses.ListMLELoss())
 listwise_model.compile(optimizer=tf.keras.optimizers.Adagrad(0.1))
 
 
-listwise_model.fit(cached_tfr, epochs=500, verbose=True)
-
+listwise_model.fit(cached_tfr, epochs=50, verbose=True)
+#test with validation data set
 listwise_model_result = listwise_model.evaluate(cached_tfe, return_dict=True)
