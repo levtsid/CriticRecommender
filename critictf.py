@@ -51,6 +51,7 @@ for i in range(len(revdd['rate'].to_list())):
 #convert dataframe to dataset of tensor slices
 spf = spar.astype(pd.SparseDtype("float", np.nan))
 
+#only needed for initial matrix tensor, not currently in use
 revspar  = tf.data.Dataset.from_tensor_slices(spf)
 
 #add id and title data to each set
