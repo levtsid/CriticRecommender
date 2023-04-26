@@ -43,11 +43,19 @@ namemin = names[names>9].reset_index().name
 revdd= revdfrevs.drop(columns = ['Unnamed: 0','linkr'])
 
 
+
 #ignore this bit, it's very ugly and needs to be fixed later
 for i in range(len(revdd['rate'].to_list())):
     spar[revdd['revi'].to_list()[i]][revdd['name'].to_list()[i]] = revdd['rate'].to_list()[i]
     
-    
+#replacement code for ugly loop
+index=list(revmin)
+columns=list(namemin)
+index=sorted(index)
+columns=sorted(columns)
+ 
+util_df=pd.pivot_table(data=revdd,values='rate',index='name',columns='revi')    
+
 #convert dataframe to dataset of tensor slices
 spf = spar.astype(pd.SparseDtype("float", np.nan))
 
