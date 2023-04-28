@@ -65,10 +65,10 @@ revspar  = tf.data.Dataset.from_tensor_slices(spf)
 #add id and title data to each set
 tensor_slic = {"user_id": [], "movie_title": [], "user_rating": []}
 
-for i in range(875):
-    tensor_slic["user_id"].append(spf.index[i])
-    tensor_slic["movie_title"].append(spf.columns)
+for i in range(namemin):
     tensor_slic["user_rating"].append(spf.values[i])
+tensor_slic["user_id"] = spf.index
+tensor_slic["movie_title"] = [spf.columns]*len(namemin)
     
 tfda = tf.data.Dataset.from_tensor_slices(tensor_slic)
 
