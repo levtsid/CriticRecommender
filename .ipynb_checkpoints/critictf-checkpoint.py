@@ -73,9 +73,10 @@ tfda = tf.data.Dataset.from_tensor_slices(tensor_slic)
 
 
 #batch and separate test and train data
-trtf = tfda.take(600)
-tetf = tfda.skip(600).take(275)
-cached_tfr = trtf.shuffle(600).batch(25).cache()
+testlen=600
+trtf = tfda.take(testlen)
+tetf = tfda.skip(testlen).take(namemin-testlen)
+cached_tfr = trtf.shuffle(testlen).batch(25).cache()
 cached_tfe = tetf.batch(25).cache()
 
 #compute fit and test
