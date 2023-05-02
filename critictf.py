@@ -21,8 +21,6 @@ import tensorflow_recommenders as tfrs
 from rankmod import RankingModel
 
 #run moviefunc
-
-
 from moviefunc import *
 bigset = {'links':[],'movie':[],'cert':[],'rateoc':[],'rateou':[],'release':[],'revcount':[]}
 rev = {'name':[],'rate':[],'revi':[],'linkr':[]}
@@ -38,6 +36,7 @@ names = revdf2.value_counts(subset = ['name'])
 revdfnames = revdf[revdf['name'].isin(names[names>9].reset_index().name)]
 revs = revdfnames.value_counts(subset = ['revi'])
 revdfrevs = revdfnames[revdfnames['revi'].isin(revs[revs>9].reset_index().revi)]
+
 revmin = revs[revs>9].reset_index().revi
 namemin = names[names>9].reset_index().name
 revdd= revdfrevs.drop(columns = ['Unnamed: 0','linkr'])
@@ -74,16 +73,18 @@ tfda = tf.data.Dataset.from_tensor_slices(tensor_slic)
 
 #batch and separate test and train data
 testlen=600
+bsize=25
+epo=50
 trtf = tfda.take(testlen)
-tetf = tfda.skip(testlen).take(namemin-testlen)
-cached_tfr = trtf.shuffle(testlen).batch(25).cache()
-cached_tfe = tetf.batch(25).cache()
+tetf = tfda.skip(testlen).take(len(namemin)-testlen)
+cached_tfr = trtf.shuffle(testlen).batch(bsize).cache()
+cached_tfe = tetf.batch(bsize).cache()
 
 #compute fit and test
 listwise_model = RankingModel(tfr.keras.losses.ListMLELoss())
 listwise_model.compile(optimizer=tf.keras.optimizers.Adagrad(0.1))
 
 
-listwise_model.fit(cached_tfr, epochs=50, verbose=True)
+listwise_model.fit(cached_tfr, epochs=epo, verbose=True)
 #test with validation data set
 listwise_model_result = listwise_model.evaluate(cached_tfe, return_dict=True)
