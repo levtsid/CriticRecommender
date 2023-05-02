@@ -32,15 +32,17 @@ bigdf = pd.read_csv("big.csv") #,sep="\\t")
 
 #keep only reviewers with 10+ reviews, and movies with 10+ reviews
 revdf2 = revdf.dropna()
+
 names = revdf2.value_counts(subset = ['name'])
 revdfnames = revdf[revdf['name'].isin(names[names>9].reset_index().name)]
+
 revs = revdfnames.value_counts(subset = ['revi'])
 revdfrevs = revdfnames[revdfnames['revi'].isin(revs[revs>9].reset_index().revi)]
 
-revmin = revs[revs>9].reset_index().revi
-namemin = names[names>9].reset_index().name
 revdd= revdfrevs.drop(columns = ['Unnamed: 0','linkr'])
 
+revmin = revs[revs>9].reset_index().revi
+namemin = names[names>9].reset_index().name
 
 
 #ignore this bit, it's very ugly and needs to be fixed later
@@ -59,7 +61,7 @@ util_df=pd.pivot_table(data=revdd,values='rate',index='name',columns='revi')
 spf = spar.astype(pd.SparseDtype("float", np.nan))
 
 #only needed for initial matrix tensor, not currently in use
-revspar  = tf.data.Dataset.from_tensor_slices(spf)
+#revspar  = tf.data.Dataset.from_tensor_slices(spf)
 
 #add id and title data to each set
 tensor_slic = {"user_id": [], "movie_title": [], "user_rating": []}
