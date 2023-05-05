@@ -31,15 +31,16 @@ revdf = pd.read_csv("rev.csv") #,sep="\\t")
 bigdf = pd.read_csv("big.csv") #,sep="\\t")
 
 #keep only reviewers with 10+ reviews, and movies with 10+ reviews
+minreview=9
 revdf2 = revdf.dropna()
 
 names = revdf2.value_counts(subset = ['name'])
-revdfnames = revdf[revdf['name'].isin(names[names>9].reset_index().name)]
-namemin = names[names>9].reset_index().name
+revdfnames = revdf[revdf['name'].isin(names[names>minreview].reset_index().name)]
+namemin = names[names>minreview].reset_index().name
 
 revs = revdfnames.value_counts(subset = ['revi'])
-revdfrevs = revdfnames[revdfnames['revi'].isin(revs[revs>9].reset_index().revi)]
-revmin = revs[revs>9].reset_index().revi
+revdfrevs = revdfnames[revdfnames['revi'].isin(revs[revs>minreview].reset_index().revi)]
+revmin = revs[revs>minreview].reset_index().revi
 
 revdd= revdfrevs.drop(columns = ['Unnamed: 0','linkr'])
 
@@ -75,6 +76,7 @@ tfda = tf.data.Dataset.from_tensor_slices(tensor_slic)
 testlen=600
 bsize=25
 epo=50
+adagradopt=0.1
 trtf = tfda.take(testlen)
 tetf = tfda.skip(testlen).take(len(namemin)-testlen)
 cached_tfr = trtf.shuffle(testlen).batch(bsize).cache()
@@ -82,7 +84,7 @@ cached_tfe = tetf.batch(bsize).cache()
 
 #compute fit and test
 listwise_model = RankingModel(tfr.keras.losses.ListMLELoss())
-listwise_model.compile(optimizer=tf.keras.optimizers.Adagrad(0.1))
+listwise_model.compile(optimizer=tf.keras.optimizers.Adagrad(adagradopt))
 
 
 listwise_model.fit(cached_tfr, epochs=epo, verbose=True)
